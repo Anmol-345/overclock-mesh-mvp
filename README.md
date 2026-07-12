@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ⚡ Overclock Mesh MVP
 
-## Getting Started
+Overclock Mesh is a sovereign DePIN (Decentralized Physical Infrastructure Network) layer for fractional GPU/CPU cluster leasing, anchored to the Hacash L1 PoW security primitives.
 
-First, run the development server:
+This repository holds the **Minimum Viable Product (MVP)** frontend and mocked backend integration, built to showcase the core flow of `$GRID` Passport minting and `$OVL` reward distribution on a Web3 wallet.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Tech Stack
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Framework:** Next.js 14+ (App Router), React 18, Turbopack
+- **Styling:** Tailwind CSS, Lucide React (Icons)
+- **Web3 / Blockchain:** RainbowKit v2, Wagmi v2, Viem (EVM-compatible architecture configured to Sepolia for testing)
+- **Database / ORM:** Prisma v5 with SQLite (`dev.db`)
+- **Language:** TypeScript strictly typed
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🛠️ Local Development Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Clone & Install Dependencies:**
+   ```bash
+   npm install
+   ```
 
-## Learn More
+2. **Initialize Database:**
+   Generate the Prisma client and push the schema to the local SQLite database.
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+3. **Start the Development Server:**
+   ```bash
+   npm run dev
+   ```
+   *Navigate to `http://localhost:3000/dashboard` to view the application.*
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🌐 Project Architecture
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **`app/dashboard/page.tsx`**: The main interface where users can allocate infrastructure lots, mint `$GRID` Passports via MetaMask, and view their simulated hardware node yield.
+- **`app/providers.tsx`**: The Web3 configuration layer that wraps the app with RainbowKit and Wagmi. It routes transactions to the **Sepolia Testnet** (aliased as Hacash EVM for the demo).
+- **`app/api/mesh/...`**: Serverless backend endpoints providing real-time data from the SQLite database.
+- **`prisma/schema.prisma`**: The schema defining `ProtocolMetrics` and `ClusterNode` infrastructure tracking.
 
-## Deploy on Vercel
+## ☁️ Vercel Deployment & Database Considerations
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Yes, you **must** configure your Environment Variables in Vercel. 
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### SQLite Limitations on Vercel
+Currently, this MVP uses a local SQLite file (`dev.db`). While Vercel can host the Next.js frontend perfectly:
+- Vercel's backend environment is **Serverless and Ephemeral**. 
+- You can *read* from a local SQLite database if it's pushed to GitHub, but **any data written to it (like verifying new nodes) will be permanently lost** when the serverless function shuts down after a few seconds.
+
+### Recommended Production Path
+For persistent data on Vercel, you should migrate the database string from SQLite to a hosted Postgres provider (such as **Vercel Postgres, Supabase, or Neon**).
+
+**If you still want to deploy the MVP as-is to Vercel for a quick visual demo:**
+1. Go to your Vercel Project Settings -> Environment Variables.
+2. Add the key `DATABASE_URL` with the exact value: `file:./dev.db`
+3. Ensure you have pushed the `dev.db` file to GitHub (or create a seed script) so the build pipeline has access to the initial data state!
