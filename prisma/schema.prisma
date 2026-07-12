@@ -1,0 +1,24 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model ProtocolMetrics {
+  id             Int @id @default(1)
+  totalSlots     Int @default(500)
+  filledSlots    Int @default(0)
+  maxSlots       Int @default(500)
+  circulatingOVL Int @default(0)
+  maxOVL         Int @default(7500000)
+}
+
+model ClusterNode {
+  id            String   @id
+  hardwareSpecs String
+  status        String   
+  verifiedAt    DateTime @default(now())
+}
