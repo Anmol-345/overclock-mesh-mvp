@@ -26,8 +26,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <Offer18Tracker />
-        <Providers>{children}</Providers>
+        <Providers>
+          <Offer18Tracker />
+          {children}
+        </Providers>
       </body>
     </html>
   );
