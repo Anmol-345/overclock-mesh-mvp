@@ -17,7 +17,7 @@ export const metadata = {
 };
 
 import { Providers } from './providers';
-import Offer18Interceptor from '@/components/Offer18Interceptor';
+import Offer18Tracker from '@/components/Offer18Tracker';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <Offer18Interceptor />
+        <Offer18Tracker />
         <Providers>{children}</Providers>
       </body>
     </html>
